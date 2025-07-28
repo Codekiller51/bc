@@ -136,14 +136,19 @@ export default function RegisterPage() {
       }
       if (formData.userType === 'creative') {
         toast.success("Account created successfully! Your profile will be reviewed by our admin team before becoming visible to clients.");
+        
+        // Redirect to profile completion for creatives
+        setTimeout(() => {
+          router.push("/profile/complete");
+        }, 2000);
       } else {
         toast.success("Account created successfully! Please check your email to verify your account.");
+        
+        // Redirect to profile completion for clients
+        setTimeout(() => {
+          router.push("/profile/complete");
+        }, 2000);
       }
-      
-      // Redirect to login page after a short delay
-      setTimeout(() => {
-        router.push("/login");
-      }, 2000);
       
     } catch (error: any) {
       // Handle zod validation errors

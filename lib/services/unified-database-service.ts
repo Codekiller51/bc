@@ -919,6 +919,73 @@ export class UnifiedDatabaseService {
   }
 
   // =============================================
+  // PORTFOLIO MANAGEMENT
+  // =============================================
+
+  static async createPortfolioItem(itemData: {
+    creative_id: string
+    title: string
+    description?: string
+    category?: string
+    project_url?: string
+    image_url?: string
+  }): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('portfolio_items')
+        .insert(itemData)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async updatePortfolioItem(
+    itemId: string,
+    updates: {
+      title?: string
+      description?: string
+      category?: string
+      project_url?: string
+      image_url?: string
+    }
+  ): Promise<any> {
+    try {
+      const { data, error } = await this.supabase
+        .from('portfolio_items')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', itemId)
+        .select()
+        .single()
+
+      if (error) throw error
+      return data
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  static async deletePortfolioItem(itemId: string): Promise<void> {
+    try {
+      const { error } = await this.supabase
+        .from('portfolio_items')
+        .delete()
+        .eq('id', itemId)
+
+      if (error) throw error
+    } catch (error) {
+      throw ApiErrorHandler.handle(error)
+    }
+  }
+
+  // =============================================
   // UTILITY METHODS
   // =============================================
 

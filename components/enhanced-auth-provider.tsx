@@ -135,8 +135,14 @@ export function withAuth<P extends object>(
           <div className="text-center">
             <h2 className="text-2xl font-bold mb-4">Approval Pending</h2>
             <p className="text-gray-600 dark:text-gray-400">
-              Your account is pending admin approval. You'll be notified once approved.
+              Your creative profile is being reviewed. You can complete your profile while waiting for approval.
             </p>
+            <a
+              href="/profile/complete"
+              className="inline-flex items-center justify-center rounded-md bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-emerald-700 mt-4"
+            >
+              Complete Profile
+            </a>
           </div>
         </div>
       )

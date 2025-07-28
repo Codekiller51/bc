@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useAuth, withAuth } from "@/components/enhanced-auth-provider"
 import { EnhancedDatabaseService } from "@/lib/services/enhanced-database-service"
+import { CreativeApprovalWorkflow } from "@/components/creative-approval-workflow"
 
 function CreativeDashboardPage() {
   const { user } = useAuth()
@@ -62,27 +63,9 @@ function CreativeDashboardPage() {
   if (approvalStatus === "pending") {
     return (
       <div className="container px-4 py-8">
-        <Card className="max-w-2xl mx-auto">
-          <CardContent className="p-8 text-center">
-            <div className="bg-yellow-100 dark:bg-yellow-900/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-              <Clock className="h-10 w-10 text-yellow-600 dark:text-yellow-400" />
-            </div>
-            <h1 className="text-3xl font-bold mb-4">Profile Under Review</h1>
-            <p className="text-gray-600 dark:text-gray-300 mb-6">
-              Your creative profile is currently being reviewed by our admin team. 
-              You'll receive a notification once your profile is approved and becomes visible to clients.
-            </p>
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h3 className="font-semibold mb-2">What happens next?</h3>
-              <ul className="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-                <li>• Admin reviews your profile and portfolio</li>
-                <li>• Verification of credentials and work samples</li>
-                <li>• Approval notification via email and SMS</li>
-                <li>• Profile becomes visible to potential clients</li>
-              </ul>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="max-w-4xl mx-auto">
+          <CreativeApprovalWorkflow />
+        </div>
       </div>
     )
   }

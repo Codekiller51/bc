@@ -20,6 +20,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import { useAuth, withAuth } from "@/components/enhanced-auth-provider"
 import { EnhancedDatabaseService } from "@/lib/services/enhanced-database-service"
 import { validateEmail, validateTanzanianPhone } from "@/lib/utils/validation"
+import { AvatarUploadService } from "@/lib/services/avatar-upload-service"
 
 function ProfileEditPage() {
   const { user, updateProfile } = useAuth()
@@ -240,13 +241,29 @@ function ProfileEditPage() {
   const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
-      // In a real app, you would upload to storage and get URL
+      const validation = AvatarUploadService.validateFile(file)
+      if (!validation.isValid) {
+        toast.error(validation.error)
+        return
+      }
+
+      // Preview the image
       const reader = new FileReader()
-      reader.onload = (e) => {
-        setProfileData(prev => ({
-          ...prev,
-          avatar_url: e.target?.result as string
-        }))
+      reader.onload = async (e) => {
+        const previewUrl = e.target?.result as string
+        setProfileData(prev => ({ ...prev, avatar_url: previewUrl }))
+        
+        // Upload the actual file
+        if (user) {
+          try {
+            const uploadResult = await AvatarUploadService.uploadAvatar(file, user.id)
+            if (uploadResult.success && uploadResult.url) {
+              setProfileData(prev => ({ ...prev, avatar_url: uploadResult.url }))
+            }
+          } catch (error) {
+            console.error('Failed to upload avatar:', error)
+          }
+        }
       }
       reader.readAsDataURL(file)
     }
@@ -623,7 +640,7 @@ function ProfileEditPage() {
                   <Button
                     onClick={handleChangePassword}
                     disabled={loading || !passwordData.newPassword}
-                    variant="outline"
+                    className="absolute bottom-0 right-0 bg-emerald-600 text-white p-2 rounded-full cursor-pointer hover:bg-emerald-700 transition-colors"
                   >
                     {loading ? "Updating..." : "Update Password"}
                   </Button>
