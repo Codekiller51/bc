@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import { createContext, useContext, ReactNode, useMemo } from 'react'
 import { GlobalLoading } from '@/components/ui/global-loading'
