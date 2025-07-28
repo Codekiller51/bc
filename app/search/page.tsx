@@ -11,7 +11,7 @@ import { CreativeCard } from "@/components/creative-card"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
-import { DatabaseService } from "@/lib/services/database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { InlineLoading } from "@/components/ui/global-loading"
 import type { CreativeProfile } from "@/lib/database/types"
 
@@ -63,7 +63,7 @@ export default function SearchPage() {
         filters.availability = selectedAvailability
       }
       
-      const data = await DatabaseService.getCreativeProfiles(filters)
+      const data = await UnifiedDatabaseService.getCreativeProfiles(filters)
       setSearchResults(data)
     } catch (error) {
       console.error('Failed to load creatives:', error)

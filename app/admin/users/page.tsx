@@ -28,7 +28,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { AdminSidebar } from "@/components/admin-sidebar"
-import { EnhancedDatabaseService } from "@/lib/services/enhanced-database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { withAuth } from "@/components/enhanced-auth-provider"
 import type { User, CreativeProfile } from "@/lib/database/types"
 
@@ -49,7 +49,7 @@ function AdminUsersPage() {
     try {
       setLoading(true)
       const filters = roleFilter !== "all" ? { role: roleFilter } : undefined
-      const data = await EnhancedDatabaseService.getUsers(filters)
+      const data = await UnifiedDatabaseService.getUsers(filters)
       setUsers(data)
     } catch (error) {
       console.error("Failed to load users:", error)
@@ -60,7 +60,7 @@ function AdminUsersPage() {
 
   const loadCreativeProfiles = async () => {
     try {
-      const data = await EnhancedDatabaseService.getCreativeProfiles()
+      const data = await UnifiedDatabaseService.getCreativeProfiles()
       setCreativeProfiles(data)
     } catch (error) {
       console.error("Failed to load creative profiles:", error)
@@ -72,7 +72,7 @@ function AdminUsersPage() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
-      await EnhancedDatabaseService.updateCreativeProfile(profileId, {
+      await UnifiedDatabaseService.updateCreativeProfile(profileId, {
         approval_status: 'approved',
         approved_at: new Date().toISOString(),
         approved_by: user.id
@@ -83,7 +83,7 @@ function AdminUsersPage() {
       toast.success('Creative professional approved successfully!')
       
       // Send approval notification
-      await EnhancedNotificationService.sendApprovalNotification(profileId, 'approved')
+      // await EnhancedNotificationService.sendApprovalNotification(profileId, 'approved')
     } catch (error) {
       console.error("Failed to approve creative:", error)
       toast.error('Failed to approve creative professional')
@@ -92,7 +92,7 @@ function AdminUsersPage() {
 
   const handleRejectCreative = async (profileId: string) => {
     try {
-      await EnhancedDatabaseService.updateCreativeProfile(profileId, {
+      await UnifiedDatabaseService.updateCreativeProfile(profileId, {
         approval_status: 'rejected'
       })
       
@@ -101,7 +101,7 @@ function AdminUsersPage() {
       toast.success('Creative professional rejected')
       
       // Send rejection notification
-      await EnhancedNotificationService.sendApprovalNotification(profileId, 'rejected')
+      // await EnhancedNotificationService.sendApprovalNotification(profileId, 'rejected')
     } catch (error) {
       console.error("Failed to reject creative:", error)
       toast.error('Failed to reject creative professional')

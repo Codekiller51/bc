@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FloatingCard } from "@/components/floating-card"
 import { TestimonialCard } from "@/components/testimonial-card"
-import { DatabaseService } from "@/lib/services/database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { Skeleton } from "@/components/ui/skeleton"
 
 export default function TestimonialsPage() {
@@ -30,7 +30,7 @@ export default function TestimonialsPage() {
   const loadTestimonials = async () => {
     try {
       setLoading(true)
-      const data = await DatabaseService.getTestimonials(10)
+      const data = await UnifiedDatabaseService.getTestimonials(10)
       
       // Transform database reviews into testimonial format
       const transformedTestimonials = data.map((review, index) => ({

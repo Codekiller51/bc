@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CreativeCard } from "@/components/creative-card"
 import { CategoryCard } from "@/components/category-card"
-import { DatabaseService } from "@/lib/services/database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { InlineLoading } from "@/components/ui/global-loading"
 import type { CreativeProfile } from "@/lib/database/types"
 
@@ -31,8 +31,8 @@ export default function Home() {
     try {
       setLoading(true)
       const [creativesData, statsData] = await Promise.all([
-        DatabaseService.getFeaturedCreatives(3),
-        DatabaseService.getCreativeStats()
+        UnifiedDatabaseService.getFeaturedCreatives(3),
+        UnifiedDatabaseService.getCreativeStats()
       ])
       
       setFeaturedCreatives(creativesData)

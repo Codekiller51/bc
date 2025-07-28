@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useMemo, useState, useEffect } from 'react'
 import { useEnhancedAuth } from '@/hooks/use-enhanced-auth'
+import { UnifiedDatabaseService } from '@/lib/services/unified-database-service'
 import type { User } from '@/lib/database/types'
 
 interface AuthContextType {

@@ -13,7 +13,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { DatabaseService } from "@/lib/services/database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import type { Conversation, Message } from "@/lib/database/types"
 
 interface RealTimeChatProps {
@@ -34,7 +34,7 @@ export function RealTimeChat({ conversation, currentUserId }: RealTimeChatProps)
     loadMessages()
 
     // Subscribe to real-time messages
-    const subscription = DatabaseService.subscribeToMessages(conversation.id, (message: Message) => {
+    const subscription = UnifiedDatabaseService.subscribeToMessages(conversation.id, (message: Message) => {
       setMessages((prev) => [...prev, message])
 
       // Mark as read if not from current user
@@ -56,7 +56,7 @@ export function RealTimeChat({ conversation, currentUserId }: RealTimeChatProps)
 
   const loadMessages = async () => {
     try {
-      const data = await DatabaseService.getMessages(conversation.id)
+      const data = await UnifiedDatabaseService.getMessages(conversation.id)
       setMessages(data)
     } catch (error) {
       console.error("Failed to load messages:", error)
@@ -68,7 +68,7 @@ export function RealTimeChat({ conversation, currentUserId }: RealTimeChatProps)
 
     setIsLoading(true)
     try {
-      const message = await DatabaseService.sendMessage({
+      const message = await UnifiedDatabaseService.sendMessage({
         conversation_id: conversation.id,
         sender_id: currentUserId,
         content: newMessage.trim(),

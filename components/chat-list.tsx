@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
-import { DatabaseService } from "@/lib/services/database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import type { Conversation } from "@/lib/database/types"
 
 interface ChatListProps {
@@ -29,7 +29,7 @@ export function ChatList({ currentUserId, onConversationSelect, selectedConversa
   const loadConversations = async () => {
     try {
       setLoading(true)
-      const data = await DatabaseService.getConversations(currentUserId)
+      const data = await UnifiedDatabaseService.getConversations(currentUserId)
       setConversations(data)
     } catch (error) {
       console.error("Failed to load conversations:", error)

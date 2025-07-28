@@ -11,7 +11,7 @@ import { RecentBookings } from "@/components/recent-bookings"
 import { RevenueChart } from "@/components/revenue-chart"
 import { UserGrowthChart } from "@/components/user-growth-chart"
 import { withAuth } from "@/components/enhanced-auth-provider"
-import { EnhancedDatabaseService } from "@/lib/services/enhanced-database-service"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 
 function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -32,7 +32,7 @@ function AdminDashboard() {
 
   const loadDashboardStats = async () => {
     try {
-      const data = await EnhancedDatabaseService.getDashboardStats()
+      const data = await UnifiedDatabaseService.getDashboardStats()
       setStats(data)
     } catch (error) {
       console.error('Failed to load dashboard stats:', error)

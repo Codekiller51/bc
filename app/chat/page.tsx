@@ -7,6 +7,7 @@ import { MessageSquare } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { ChatList } from "@/components/chat-list"
 import { RealTimeChat } from "@/components/real-time-chat"
+import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import type { Conversation } from "@/lib/database/types"
 
 export default function ChatPage() {
