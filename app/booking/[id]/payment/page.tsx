@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { PaymentService } from "@/lib/services/payment-service"
 import { EnhancedDatabaseService } from "@/lib/services/enhanced-database-service"
-import { EnhancedNotificationService } from "@/lib/services/enhanced-notification-service"
+import { NotificationService } from "@/lib/services/notification-service"
 import { CalendarService } from "@/lib/services/calendar-service"
 import type { Creative, Service } from "@/lib/types"
 

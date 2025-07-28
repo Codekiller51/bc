@@ -17,6 +17,8 @@ import {
   AlertTriangle,
 } from "lucide-react"
 
+import { toast } from "sonner"
+import { supabase } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"

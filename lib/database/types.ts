@@ -7,10 +7,12 @@ export interface User {
   role: "client" | "creative" | "admin"
   location?: string
   verified: boolean
-  approved?: boolean
+  approved: boolean
   created_at: string
   updated_at: string
   user_metadata?: { [key: string]: any }
+  company_name?: string
+  industry?: string
 }
 
 export interface CreativeProfile {
@@ -19,10 +21,14 @@ export interface CreativeProfile {
   title: string
   category: string
   bio?: string
+  skills?: string[]
   hourly_rate?: number
   rating: number
   reviews_count: number
   completed_projects: number
+  location?: string
+  avatar_url?: string
+  portfolio_url?: string
   availability_status: string
   approval_status: "pending" | "approved" | "rejected"
   approved_by?: string
@@ -34,6 +40,9 @@ export interface CreativeProfile {
     phone?: string
     raw_user_meta_data?: any
   }
+  services?: Service[]
+  portfolio_items?: PortfolioItem[]
+  testimonials?: any[]
 }
 
 export interface Service {

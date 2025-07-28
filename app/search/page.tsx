@@ -13,7 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 import { DatabaseService } from "@/lib/services/database-service"
 import { InlineLoading } from "@/components/ui/global-loading"
-import type { CreativeProfile } from "@/lib/database/creative-profile"
+import type { CreativeProfile } from "@/lib/database/types"
 
 export default function SearchPage() {
   const [searchResults, setSearchResults] = useState<CreativeProfile[]>([])
