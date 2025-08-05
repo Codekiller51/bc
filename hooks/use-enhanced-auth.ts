@@ -41,7 +41,7 @@ export function useEnhancedAuth() {
   useEffect(() => {
     const initializeAuth = async () => {
       try {
-        loadingContext.startGlobalLoading("Initializing authentication...")
+        // Don't show loading for initial auth check
         const user = await EnhancedAuthService.getCurrentUser()
         
         if (user) {
@@ -62,25 +62,32 @@ export function useEnhancedAuth() {
         setAuthState({
           user: null,
           loading: false,
-          error: error instanceof Error ? error.message : 'Authentication error'
+          error: null // Don't show auth errors on initial load
         })
-      } finally {
-        loadingContext.stopGlobalLoading()
       }
     }
 
     initializeAuth()
 
     // Listen for auth changes
-    const { data: { subscription } } = EnhancedAuthService.onAuthStateChange(
+    const subscription = EnhancedAuthService.onAuthStateChange(
       async (event, session) => {
         if (event === 'SIGNED_IN' && session?.user) {
-          const userData = await EnhancedAuthService.getCurrentUser()
-          setAuthState({
-            user: userData,
-            loading: false,
-            error: null
-          })
+          try {
+            const userData = await EnhancedAuthService.getCurrentUser()
+            setAuthState({
+              user: userData,
+              loading: false,
+              error: null
+            })
+          } catch (error) {
+            console.error('Error loading user data after sign in:', error)
+            setAuthState({
+              user: null,
+              loading: false,
+              error: null
+            })
+          }
         } else if (event === 'SIGNED_OUT') {
           setAuthState({
             user: null,
@@ -92,7 +99,7 @@ export function useEnhancedAuth() {
     )
 
     return () => {
-      subscription.unsubscribe()
+      subscription?.data?.subscription?.unsubscribe()
     }
   }, [loadingContext])
 

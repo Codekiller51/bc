@@ -23,7 +23,19 @@ export class UnifiedDatabaseService {
   static async getCurrentUser(): Promise<User | null> {
     try {
       const { data: { user }, error } = await this.supabase.auth.getUser()
-      if (error || !user) return null
+      
+      if (error) {
+        // Handle specific auth errors
+        if (error.message.includes('User from sub claim in JWT does not exist')) {
+          console.warn('JWT user not found, clearing session')
+          await this.supabase.auth.signOut()
+          return null
+        }
+        console.error('Auth error:', error)
+        return null
+      }
+      
+      if (!user) return null
 
       // Check if user is admin first
       if (user.user_metadata?.role === 'admin') {
@@ -42,11 +54,15 @@ export class UnifiedDatabaseService {
       }
 
       // Try client profile first
-      const { data: clientProfile } = await this.supabase
+      const { data: clientProfile, error: clientError } = await this.supabase
         .from('client_profiles')
         .select('*')
         .eq('id', user.id)
         .maybeSingle()
+
+      if (clientError) {
+        console.warn('Error fetching client profile:', clientError.message)
+      }
 
       if (clientProfile) {
         return {
@@ -67,11 +83,15 @@ export class UnifiedDatabaseService {
       }
 
       // Try creative profile
-      const { data: creativeProfile } = await this.supabase
+      const { data: creativeProfile, error: creativeError } = await this.supabase
         .from('creative_profiles')
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle()
+
+      if (creativeError) {
+        console.warn('Error fetching creative profile:', creativeError.message)
+      }
 
       if (creativeProfile) {
         return {

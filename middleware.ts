@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
 // Define protected routes that require authentication
 const protectedRoutes = [
@@ -34,22 +35,64 @@ export const config = {
 }
 
 export async function middleware(req: NextRequest) {
-  const path = req.nextUrl.pathname
-  
-  // Handle admin routes
-  if (adminRoutes.some(route => path.startsWith(route))) {
-    // Allow admin login page
-    if (path === '/admin/login') {
-      return NextResponse.next()
-    }
-    
-    // For other admin routes, redirect to admin login if not authenticated
-    // The actual admin role check is handled client-side in the withAuth HOC
-    return NextResponse.next()
+  let response = NextResponse.next({
+    request: {
+      headers: req.headers,
+    },
+  })
+
+  try {
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          get(name: string) {
+            return req.cookies.get(name)?.value
+          },
+          set(name: string, value: string, options: any) {
+            req.cookies.set({
+              name,
+              value,
+              ...options,
+            })
+            response = NextResponse.next({
+              request: {
+                headers: req.headers,
+              },
+            })
+            response.cookies.set({
+              name,
+              value,
+              ...options,
+            })
+          },
+          remove(name: string, options: any) {
+            req.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
+            response = NextResponse.next({
+              request: {
+                headers: req.headers,
+              },
+            })
+            response.cookies.set({
+              name,
+              value: '',
+              ...options,
+            })
+          },
+        },
+      }
+    )
+    // Refresh session if expired
+    await supabase.auth.getUser()
+
+  } catch (error) {
+    console.error('Middleware error:', error)
   }
   
-  // Allow all requests to pass through
-  // Auth protection is handled by the enhanced auth provider
-  
-  return NextResponse.next()
+  return response
 }

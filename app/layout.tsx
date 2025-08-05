@@ -1,7 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
-import { SessionProvider } from "next-auth/react"
 import { Toaster } from "sonner"
 import "./globals.css"
 
@@ -15,7 +14,6 @@ import { generateMetadata } from "@/lib/utils/seo"
 import { defaultSEO } from "@/lib/utils/seo"
 import { LoadingProvider } from "@/components/loading-provider"
 import { SessionStatusIndicator } from "@/components/session-status-indicator"
-import { SessionProviderWrapper } from "@/components/providers/session-provider-wrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 

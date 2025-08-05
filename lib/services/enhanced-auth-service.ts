@@ -287,7 +287,61 @@ export class EnhancedAuthService {
   }
 
   static async getCurrentUser(): Promise<User | null> {
-    return UnifiedDatabaseService.getCurrentUser()
+    try {
+      const { data: { user }, error } = await supabase.auth.getUser()
+      
+      if (error) {
+        // If user not found in JWT, clear the session
+        if (error.message.includes('User from sub claim in JWT does not exist')) {
+          await supabase.auth.signOut()
+          return null
+        }
+        throw error
+      }
+      
+      if (!user) return null
+
+      // Check if user is admin first
+      if (user.user_metadata?.role === 'admin') {
+        return {
+          id: user.id,
+          email: user.email || '',
+          name: user.user_metadata?.full_name || 'Admin',
+          phone: user.user_metadata?.phone,
+          role: 'admin',
+          location: user.user_metadata?.location,
+          verified: true,
+          approved: true,
+          created_at: user.created_at,
+          updated_at: user.updated_at || user.created_at
+        }
+      }
+
+      // Try to get user profile from database
+      try {
+        const userData = await UnifiedDatabaseService.getCurrentUser()
+        return userData
+      } catch (dbError) {
+        console.warn('Database profile not found, using auth data:', dbError)
+        
+        // Fallback: create user from auth data
+        return {
+          id: user.id,
+          email: user.email || '',
+          name: user.user_metadata?.full_name || user.user_metadata?.name || 'User',
+          phone: user.user_metadata?.phone,
+          role: user.user_metadata?.user_type || user.user_metadata?.role || 'client',
+          location: user.user_metadata?.location,
+          verified: user.email_confirmed_at !== null,
+          approved: true,
+          created_at: user.created_at,
+          updated_at: user.updated_at || user.created_at
+        }
+      }
+    } catch (error) {
+      console.error('Error getting current user:', error)
+      return null
+    }
   }
 
   static async refreshSession(): Promise<{ success: boolean; error?: string }> {
