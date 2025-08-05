@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { Bell, Check, X } from 'lucide-react'
-import { useSession } from 'next-auth/react'
 import { supabase } from '@/lib/supabase/client'
+import { useAuth } from '@/components/enhanced-auth-provider'
 
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
@@ -29,14 +29,14 @@ type Notification = {
 }
 
 export function NotificationSystem() {
-  const { data: session } = useSession()
+  const { user } = useAuth()
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [isOpen, setIsOpen] = useState(false)
   const { toast } = useToast()
 
   useEffect(() => {
-    if (session?.user?.id) {
+    if (user?.id) {
       fetchNotifications()
       subscribeToNotifications()
     }
@@ -44,11 +44,11 @@ export function NotificationSystem() {
     return () => {
       supabase.channel('notifications').unsubscribe()
     }
-  }, [session])
+  }, [user?.id])
 
   const fetchNotifications = async () => {
     try {
-      const response = await fetch(`/api/notifications?userId=${session?.user?.id}`)
+      const response = await fetch(`/api/notifications?userId=${user?.id}`)
       if (!response.ok) throw new Error('Failed to fetch notifications')
       
       const data = await response.json()
@@ -73,7 +73,7 @@ export function NotificationSystem() {
           event: 'INSERT',
           schema: 'public',
           table: 'notification_events',
-          filter: `recipient_id=eq.${session?.user?.id}`
+          filter: `recipient_id=eq.${user?.id}`
         },
         (payload) => {
           fetchNotifications()

@@ -32,18 +32,16 @@ export default function RootLayout({
         <ErrorBoundary>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             <LoadingProvider>
-              <SessionProviderWrapper>
-                <EnhancedAuthProvider>
-                  <div className="relative flex min-h-screen flex-col">
-                    <SiteHeader />
-                    <main className="flex-1">{children}</main>
-                    <SiteFooter />
-                  </div>
-                  <AIChatBot />
-                  <SessionStatusIndicator />
-                  <Toaster />
-                </EnhancedAuthProvider>
-              </SessionProviderWrapper>
+              <EnhancedAuthProvider>
+                <div className="relative flex min-h-screen flex-col">
+                  <SiteHeader />
+                  <main className="flex-1">{children}</main>
+                  <SiteFooter />
+                </div>
+                <AIChatBot />
+                <SessionStatusIndicator />
+                <Toaster />
+              </EnhancedAuthProvider>
             </LoadingProvider>
           </ThemeProvider>
         </ErrorBoundary>
