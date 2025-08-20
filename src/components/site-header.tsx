@@ -1,8 +1,6 @@
 'use client'
 
-import Link from "next/link"
-
-import Image from "next/image"
+import { Link } from "react-router-dom"
 import { MainNav } from "@/components/main-nav"
 import { ModeToggle } from "@/components/mode-toggle"
 import { NotificationSystem } from "@/components/notification-system"
@@ -29,13 +27,13 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
-        <Link href="/" className="flex items-center space-x-2">
-          <Image
+        <Link to="/" className="flex items-center space-x-2">
+          <img
             src="/logos/logo-transparent.png"
             alt="Brand Connect Logo"
-            width={120}
-            height={30}
-            priority
+            width="120"
+            height="30"
+            className="h-[30px] w-[120px]"
           />
         </Link>
         <MainNav />
@@ -73,17 +71,17 @@ export function SiteHeader() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link href={
+                    <Link to={
                       user.role === 'admin' ? '/admin' :
                       user.role === 'creative' ? '/dashboard/creative' :
                       '/dashboard'
                     }>Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/profile">My Profile</Link>
+                    <Link to="/profile">My Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/profile/edit">Edit Profile</Link>
+                    <Link to="/profile/edit">Edit Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
@@ -93,7 +91,7 @@ export function SiteHeader() {
               </DropdownMenu>
             ) : (
               <Button asChild>
-                <Link href="/login">Sign In</Link>
+                <Link to="/login">Sign In</Link>
               </Button>
             )}
           </nav>

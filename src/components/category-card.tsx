@@ -1,4 +1,4 @@
-import Link from "next/link"
+import { Link } from "react-router-dom"
 import { BarChart, Camera, Palette, Video } from "lucide-react"
 
 import { Card, CardContent } from "@/components/ui/card"
@@ -27,7 +27,7 @@ export function CategoryCard({ title, icon, description, href }: CategoryCardPro
   }
 
   return (
-    <Link href={href}>
+    <Link to={href}>
       <Card className="overflow-hidden transition-all hover:shadow-md">
         <CardContent className="p-6 flex flex-col items-center text-center space-y-4">
           {getIcon(icon)}

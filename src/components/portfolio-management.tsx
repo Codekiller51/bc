@@ -28,7 +28,6 @@ import { UnifiedDatabaseService } from "@/lib/services/unified-database-service"
 import { AvatarUploadService } from "@/lib/services/avatar-upload-service"
 import { useAuth } from "@/components/enhanced-auth-provider"
 import { toast } from "sonner"
-import Image from "next/image"
 
 interface PortfolioItem {
   id: string
@@ -253,11 +252,10 @@ export function PortfolioManagement() {
                   {imagePreview ? (
                     <div className="relative">
                       <div className="relative h-48 w-full rounded-lg overflow-hidden">
-                        <Image
+                        <img
                           src={imagePreview}
                           alt="Preview"
-                          fill
-                          className="object-cover"
+                          className="w-full h-full object-cover"
                         />
                       </div>
                       <Button
@@ -422,11 +420,10 @@ export function PortfolioManagement() {
                   {/* Image */}
                   <div className="relative h-48 bg-gray-100 dark:bg-gray-800">
                     {item.image_url ? (
-                      <Image
+                      <img
                         src={item.image_url}
                         alt={item.title}
-                        fill
-                        className="object-cover"
+                        className="w-full h-full object-cover"
                       />
                     ) : (
                       <div className="flex items-center justify-center h-full">

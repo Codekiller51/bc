@@ -1,5 +1,4 @@
-import Link from "next/link"
-import Image from "next/image"
+import { Link } from "react-router-dom"
 import { MapPin, Star } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -19,7 +18,7 @@ export function CreativeCard({ name, title, location, rating, reviews, imageSrc,
   return (
     <Card className="overflow-hidden">
       <div className="relative h-48 w-full">
-        <Image src={imageSrc || "/placeholder.svg"} alt={name} fill className="object-cover" />
+        <img src={imageSrc || "/placeholder.svg"} alt={name} className="w-full h-full object-cover" />
       </div>
       <CardContent className="p-4">
         <div className="flex flex-col space-y-2">
@@ -44,7 +43,7 @@ export function CreativeCard({ name, title, location, rating, reviews, imageSrc,
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Link href={href} className="w-full">
+        <Link to={href} className="w-full">
           <Button variant="outline" className="w-full">
             View Profile
           </Button>
